@@ -15,16 +15,13 @@
  *
  */
 
-package payload
+package fullyConnect
 
-import "math/rand"
+import (
+	topology2 "github.com/SealSC/SealABC/network/p2p"
+	"github.com/SealSC/SealABC/network/p2p/topology/p2p/fullyConnect/topology"
+)
 
-type PingPongPayload struct {
-    Number    int
-}
-
-func NewPing() (next PingPongPayload) {
-    return PingPongPayload {
-        Number: rand.Int(),
-    }
+func NewTopology() topology2.ITopology {
+	return &topology.Topology{}
 }

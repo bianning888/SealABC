@@ -15,18 +15,24 @@
  *
  */
 
-package network
+package p2p
+
+import (
+	"github.com/SealSC/SealABC/crypto/signers/signerCommon"
+)
 
 type Config struct {
-    ID              string
+	ID string
 
-    ClientOnly      bool
+	ClientOnly bool
 
-    ServiceProtocol string
-    ServiceAddress  string
+	ServiceProtocol string
+	ServiceAddress  string
 
-    P2PSeeds        []string
+	P2PSeeds []string
 
-    Topology        ITopology
-    Router          IRouter
+	Topology ITopology
+	Router   IRouter
+
+	SelfSigner signerCommon.ISigner
 }

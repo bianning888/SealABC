@@ -36,12 +36,12 @@ package hotStuff
 
 import (
 	"github.com/SealSC/SealABC/crypto/signers/signerCommon"
-	"github.com/SealSC/SealABC/network"
+	"github.com/SealSC/SealABC/network/p2p"
 )
 
 type Member struct {
 	Signer   signerCommon.ISigner
-	FromNode network.Node
+	FromNode p2p.Node
 	online   bool
 }
 

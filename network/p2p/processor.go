@@ -15,13 +15,9 @@
  *
  */
 
-package payload
+package p2p
 
-import (
-    "github.com/SealSC/SealABC/network"
-    "encoding/json"
-)
-
-func FromMessage(msg network.Message, payload interface{}) (err error) {
-    return json.Unmarshal(msg.Payload, payload)
+type IProcessor interface {
+	Handle(message Message, network *Service) (result interface{}, err error)
+	ForMessage() string
 }

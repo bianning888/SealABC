@@ -21,14 +21,14 @@ import (
 	"github.com/SealSC/SealABC/consensus"
 	"github.com/SealSC/SealABC/engine/engineApi"
 	"github.com/SealSC/SealABC/log"
-	"github.com/SealSC/SealABC/network"
+	"github.com/SealSC/SealABC/network/p2p"
 )
 
 type Config struct {
 	Api engineApi.Config
 	Log log.Config
 
-	ConsensusNetwork  network.Config
+	ConsensusNetwork  p2p.Config
 	ConsensusDisabled bool
 	ConsensusType     consensus.Type
 

@@ -15,13 +15,16 @@
  *
  */
 
-package fullyConnect
+package p2p
 
-import (
-    "github.com/SealSC/SealABC/network"
-    "github.com/SealSC/SealABC/network/topology/p2p/fullyConnect/topology"
-)
+type Node struct {
+	ID           string
+	Protocol     string
+	ServeAddress string
+	CustomerData []byte
+}
 
-func NewTopology() network.ITopology {
-    return &topology.Topology{}
+type LinkNode struct {
+	Node
+	Link ILink
 }

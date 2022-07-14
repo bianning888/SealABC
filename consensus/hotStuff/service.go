@@ -43,7 +43,7 @@ import (
 	"github.com/SealSC/SealABC/dataStructure/enum"
 	"github.com/SealSC/SealABC/log"
 	"github.com/SealSC/SealABC/metadata/message"
-	"github.com/SealSC/SealABC/network"
+	"github.com/SealSC/SealABC/network/p2p"
 	"sync"
 	"time"
 )
@@ -66,7 +66,7 @@ type hotStuff interface {
 }
 
 type basicHotStuffInformation struct {
-	Network           network.StaticInformation
+	Network           p2p.StaticInformation
 	Members           []string
 	ConsensusInterval time.Duration
 	ConsensusTimeout  time.Duration
@@ -90,7 +90,7 @@ type BasicService struct {
 	ConsensusProcessor map[string]consensusProcessor
 	ExternalProcessor  consensus.ExternalProcessor
 
-	network network.IService
+	network p2p.IService
 
 	information *basicHotStuffInformation
 	hotStuff    hotStuff
@@ -313,7 +313,7 @@ func (b *BasicService) GetLastConsensusCustomerData() []byte {
 	return b.BLeaf.Payload.CustomerData
 }
 
-func (b *BasicService) Load(networkService network.IService, processor consensus.ExternalProcessor) {
+func (b *BasicService) Load(networkService p2p.IService, processor consensus.ExternalProcessor) {
 	enum.Build(&MessageTypes, 0, fmt.Sprintf("%s-", b.hotStuff.MessageFamily()))
 	enum.Build(&ConsensusPhases, 0, "")
 

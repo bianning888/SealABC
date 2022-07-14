@@ -15,31 +15,12 @@
  *
  */
 
-package engineStartup
+package topology
 
 import (
 	"github.com/SealSC/SealABC/network/p2p"
 )
 
-func startConsensusNetwork() (networkService p2p.IService, err error) {
-	netCfg := config.ConsensusNetwork
-	networkService = &p2p.Service{}
-	networkService.Create(netCfg)
-
-	if len(config.ConsensusNetwork.P2PSeeds) == 0 {
-		return
-	}
-
-	var seedNodes []p2p.Node
-	for _, seed := range netCfg.P2PSeeds {
-		newP2PNode := p2p.Node{}
-
-		newP2PNode.ServeAddress = seed
-		newP2PNode.Protocol = netCfg.ServiceProtocol
-
-		seedNodes = append(seedNodes, newP2PNode)
-	}
-
-	err = networkService.Join(seedNodes, nil)
-	return
+type iMessageProcessor interface {
+	Process(msg p2p.Message, topology *Topology, link p2p.ILink) (err error)
 }

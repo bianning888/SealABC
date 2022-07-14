@@ -15,12 +15,16 @@
  *
  */
 
-package topology
+package payload
 
-import (
-    "github.com/SealSC/SealABC/network"
-)
+import "math/rand"
 
-type iMessageProcessor interface {
-    Process(msg network.Message, topology *Topology, link network.ILink) (err error)
+type PingPongPayload struct {
+	Number int
+}
+
+func NewPing() (next PingPongPayload) {
+	return PingPongPayload{
+		Number: rand.Int(),
+	}
 }

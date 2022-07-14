@@ -15,16 +15,12 @@
  *
  */
 
-package network
+package payload
 
-type Node struct {
-    ID           string
-    Protocol     string
-    ServeAddress string
-    CustomerData []byte
-}
+import (
+	"github.com/SealSC/SealABC/network/p2p"
+)
 
-type LinkNode struct {
-    Node
-    Link        ILink
+type NeighborsPayload struct {
+	Neighbors []p2p.Node
 }

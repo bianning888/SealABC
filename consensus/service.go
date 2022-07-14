@@ -20,7 +20,7 @@ package consensus
 import (
 	"github.com/SealSC/SealABC/dataStructure/enum"
 	"github.com/SealSC/SealABC/metadata/message"
-	"github.com/SealSC/SealABC/network"
+	"github.com/SealSC/SealABC/network/p2p"
 )
 
 type state struct {
@@ -50,7 +50,7 @@ type ExternalProcessor interface {
 }
 
 type IConsensusService interface {
-	Load(networkService network.IService, processor ExternalProcessor)
+	Load(networkService p2p.IService, processor ExternalProcessor)
 	Start(cfg interface{}) (err error)
 	Stop() (err error)
 
@@ -64,7 +64,7 @@ type IConsensusService interface {
 	StaticInformation() interface{}
 }
 
-func Load(service IConsensusService, ns network.IService, processor ExternalProcessor) IConsensusService {
+func Load(service IConsensusService, ns p2p.IService, processor ExternalProcessor) IConsensusService {
 	enum.Build(&States, 0, "")
 	enum.Build(&Event, 0, "")
 	service.Load(ns, processor)

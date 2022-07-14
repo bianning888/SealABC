@@ -15,10 +15,21 @@
  *
  */
 
-package payload
+package p2p
 
-import "github.com/SealSC/SealABC/network"
+import (
+	"net"
+)
 
-type NeighborsPayload struct {
-    Neighbors   []network.Node
+const (
+	Max_buffer_size = 10 * 1024 * 1024
+)
+
+type ILink interface {
+	Start()
+	StartReceiving()
+	SendData(data []byte) (n int, err error)
+	SendMessage(msg Message) (n int, err error)
+	RemoteAddr() net.Addr
+	Close()
 }
