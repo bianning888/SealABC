@@ -19,6 +19,7 @@ package secp256k1
 
 import (
 	"bytes"
+	"crypto"
 	"encoding/hex"
 	"errors"
 	"github.com/SealSC/SealABC/crypto/signers/signerCommon"
@@ -32,11 +33,11 @@ type keyPair struct {
 	PublicKey  *btcec.PublicKey
 }
 
-func (k keyPair)Type() string {
+func (k keyPair) Type() string {
 	return algorithmName
 }
 
-func (k keyPair)Sign(data []byte) (signature []byte, err error) {
+func (k keyPair) Sign(data []byte) (signature []byte, err error) {
 	if k.PrivateKey == nil {
 		return nil, errors.New("no private key")
 	}
@@ -46,11 +47,10 @@ func (k keyPair)Sign(data []byte) (signature []byte, err error) {
 		return
 	}
 
-
 	return sig.Serialize(), nil
 }
 
-func (k keyPair)Verify(data []byte, signature []byte) (passed bool, err error) {
+func (k keyPair) Verify(data []byte, signature []byte) (passed bool, err error) {
 	if k.PublicKey == nil {
 		return false, errors.New("no public key")
 	}
@@ -60,29 +60,28 @@ func (k keyPair)Verify(data []byte, signature []byte) (passed bool, err error) {
 		return
 	}
 
-
 	return sig.Verify(data, k.PublicKey), nil
 }
 
-func (k keyPair)RawKeyPair() (kp interface{}) {
+func (k keyPair) RawKeyPair() (kp interface{}) {
 	return nil
 }
 
-func (k keyPair)KeyPairData() (keyData []byte) {
+func (k keyPair) KeyPairData() (keyData []byte) {
 	return nil
 }
 
-func (k keyPair)PublicKeyString() (key string) {
+func (k keyPair) PublicKeyString() (key string) {
 	keyBytes := k.PublicKeyBytes()
 	return hex.EncodeToString(keyBytes)
 }
 
-func (k keyPair)PrivateKeyString() (key string) {
+func (k keyPair) PrivateKeyString() (key string) {
 	keyBytes := k.PrivateKeyBytes()
 	return hex.EncodeToString(keyBytes)
 }
 
-func (k keyPair)PublicKeyBytes() (key [] byte) {
+func (k keyPair) PublicKeyBytes() (key []byte) {
 	if k.PublicKey == nil {
 		return
 	}
@@ -90,7 +89,7 @@ func (k keyPair)PublicKeyBytes() (key [] byte) {
 	return k.PublicKey.SerializeCompressed()
 }
 
-func (k keyPair)PrivateKeyBytes() (key []byte) {
+func (k keyPair) PrivateKeyBytes() (key []byte) {
 	if k.PrivateKey == nil {
 		return
 	}
@@ -98,7 +97,7 @@ func (k keyPair)PrivateKeyBytes() (key []byte) {
 	return k.PrivateKey.Serialize()
 }
 
-func (k keyPair)PublicKeyCompare(pub interface{}) (equal bool) {
+func (k keyPair) PublicKeyCompare(pub interface{}) (equal bool) {
 	pubBytes, ok := pub.([]byte)
 	if !ok {
 		return false
@@ -107,12 +106,15 @@ func (k keyPair)PublicKeyCompare(pub interface{}) (equal bool) {
 	return bytes.Equal(k.PublicKeyBytes(), pubBytes)
 }
 
-type keyGenerator struct {}
+func (k keyPair) ToStandardKey() crypto.PrivateKey {
+	return &k.PrivateKey
+}
+
+type keyGenerator struct{}
 
 func (keyGenerator) Type() string {
 	return algorithmName
 }
-
 
 func (keyGenerator) NewSigner(_ interface{}) (s signerCommon.ISigner, err error) {
 	priv, err := btcec.NewPrivateKey(btcec.S256())
@@ -159,7 +161,7 @@ func (k *keyGenerator) FromRawPublicKey(key interface{}) (s signerCommon.ISigner
 	}
 	if len(keyBytes) != btcec.PubKeyBytesLenCompressed &&
 		len(keyBytes) != btcec.PubKeyBytesLenUncompressed &&
-		len(keyBytes) != btcec.PubKeyBytesLenHybrid{
+		len(keyBytes) != btcec.PubKeyBytesLenHybrid {
 		err = errors.New("invalid key size")
 		return
 	}
@@ -169,13 +171,13 @@ func (k *keyGenerator) FromRawPublicKey(key interface{}) (s signerCommon.ISigner
 		return
 	}
 
-	s =  &keyPair{
+	s = &keyPair{
 		PublicKey: pub,
 	}
 	return
 }
 
-func (k *keyGenerator) FromKeyPairData(_ []byte) (signer signerCommon.ISigner, err error)  {
+func (k *keyGenerator) FromKeyPairData(_ []byte) (signer signerCommon.ISigner, err error) {
 	err = errors.New("only support gen from key bytes")
 	return
 }
